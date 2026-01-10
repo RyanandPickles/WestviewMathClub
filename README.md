@@ -1,2 +1,2 @@
 # WestviewMathClub
-So like what is this Ryan
+Welcome to the Westview Mathematica Page! This webpage contains many important things, like past test documents and their solutions.
