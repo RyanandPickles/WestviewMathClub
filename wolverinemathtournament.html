@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wolverine Math Tournament - Code</title>
+    <link rel="stylesheet" href="indexhtml.css">
+</head>
+<body>
 
+    <header class="top-bar">
+        <div class="site-title">Westview Math Club</div>
+        <nav class="nav">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link active">Tournament</a>
+            <a href="#" class="cta">WMT Portal</a>
+        </nav>
+    </header>
+
+    <main class="content-section">
+        <div class="about-card fade-in">
+            <h2>Tournament Code & Resources</h2>
+            <p>Below you'll find the scripts and logic used for tournament scoring and problem generation.</p>
+            
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+            <h3>Scoring Algorithm</h3>
+            <div style="background: #07121a; padding: 15px; border-radius: 8px; font-family: monospace; color: var(--primary); border: 1px solid rgba(255,255,255,0.05); overflow-x: auto;">
+                <pre>
+def calculate_score(correct_answers, time_bonus):
+    base_score = correct_answers * 10
+    return base_score + time_bonus
+
+print(f"Final Score: {calculate_score(15, 5)}")
+                </pre>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Westview Math Club</p>
+    </footer>
+
+</body>
+</html>
