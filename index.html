@@ -1,113 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Westview Mathematica</title>
-
-  <!-- Google font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Local stylesheet -->
   <link rel="stylesheet" href="indexhtml.css">
 </head>
 <body>
-  <header class="top-bar" role="banner">
-    <div class="site-title" aria-label="Westview Mathematica">Westview Mathematica</div>
-
-    <div class="search-container" role="search">
-      <input type="search" id="searchInput" placeholder="Search pages..." aria-label="Search pages">
-      <div class="suggestions" id="suggestions" role="listbox" aria-hidden="true"></div>
-    </div>
-
-    <nav>
+  <header class="top-bar">
+    <div class="site-title">Westview Mathematica</div>
+    <nav class="nav">
+      <a class="nav-link active" href="index.html">Home</a>
+      <a class="nav-link" href="about.html">About</a>
       <a class="cta" href="wolverine-math-tournament.html">Wolverine Math Tournament</a>
     </nav>
   </header>
 
-  <main class="title-section fade-in" role="main">
+  <main class="title-section fade-in">
     <div class="hero">
       <h1>Westview Mathematica</h1>
       <p>Official website of the Westview Math Club — practice problems, meetings, competitions, and resources.</p>
     </div>
   </main>
 
-  <script>
-    // ---- simple search/autocomplete (same logic as before) ----
-    const pages = [
-      { title: "Home", url: "index.html", keywords: "westview mathematica math club home" },
-      { title: "Wolverine Math Tournament", url: "wolverine-math-tournament.html", keywords: "tournament competition wolverine math contest" },
-      { title: "Meetings", url: "meetings.html", keywords: "meetings schedule weekly practice" },
-      { title: "Resources", url: "resources.html", keywords: "amc 8 amc 10 problems resources practice" }
-    ];
-
-    const searchInput = document.getElementById("searchInput");
-    const suggestions = document.getElementById("suggestions");
-
-    function showSuggestions(matches) {
-      suggestions.innerHTML = "";
-      matches.forEach((page, i) => {
-        const div = document.createElement("div");
-        div.className = "suggestion-item";
-        div.textContent = page.title;
-        div.setAttribute("role", "option");
-        div.onclick = () => window.location.href = page.url;
-        suggestions.appendChild(div);
-      });
-      suggestions.style.display = matches.length ? "block" : "none";
-      suggestions.setAttribute("aria-hidden", matches.length ? "false" : "true");
-    }
-
-    searchInput.addEventListener("input", () => {
-      const q = searchInput.value.trim().toLowerCase();
-      if (!q) {
-        suggestions.style.display = "none";
-        suggestions.setAttribute("aria-hidden", "true");
-        return;
-      }
-
-      const matches = pages.filter(p =>
-        p.title.toLowerCase().includes(q) ||
-        p.keywords.toLowerCase().includes(q)
-      );
-
-      if (matches.length) showSuggestions(matches);
-      else {
-        suggestions.style.display = "none";
-        suggestions.setAttribute("aria-hidden", "true");
-      }
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!e.target.closest(".search-container")) {
-        suggestions.style.display = "none";
-        suggestions.setAttribute("aria-hidden", "true");
-      }
-    });
-
-    // optional: keyboard navigation for suggestions
-    let idx = -1;
-    searchInput.addEventListener("keydown", (e) => {
-      const items = [...document.querySelectorAll(".suggestion-item")];
-      if (!items.length) return;
-
-      if (e.key === "ArrowDown") {
-        idx = Math.min(idx + 1, items.length - 1);
-        items.forEach((it, i) => it.classList.toggle("focused", i === idx));
-        items[idx].scrollIntoView({ block: "nearest" });
-        e.preventDefault();
-      } else if (e.key === "ArrowUp") {
-        idx = Math.max(idx - 1, 0);
-        items.forEach((it, i) => it.classList.toggle("focused", i === idx));
-        items[idx].scrollIntoView({ block: "nearest" });
-        e.preventDefault();
-      } else if (e.key === "Enter" && idx >= 0) {
-        items[idx].click();
-      } else if (e.key === "Escape") {
-        suggestions.style.display = "none";
-        suggestions.setAttribute("aria-hidden", "true");
-      }
-    });
-  </script>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <small>© Westview Mathematica</small>
+    </div>
+  </footer>
 </body>
 </html>
