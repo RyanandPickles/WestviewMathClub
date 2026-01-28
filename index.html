@@ -1,179 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Westview Mathematica</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #9dcbe3;
-            color: #000000;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Westview Mathematica</title>
 
-        /* Top bar */
-        .top-bar {
-            background-color: #000000;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            gap: 15px;
-        }
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .site-title {
-            color: #9dcbe3;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: auto;
-        }
-
-        /* Search container */
-        .search-container {
-            position: relative;
-        }
-
-        .search-container input {
-            padding: 6px 10px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: none;
-            width: 200px;
-        }
-
-        .suggestions {
-            position: absolute;
-            top: 35px;
-            left: 0;
-            background-color: #ffffff;
-            color: #000000;
-            width: 100%;
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 100;
-        }
-
-        .suggestions div {
-            padding: 8px;
-            cursor: pointer;
-        }
-
-        .suggestions div:hover {
-            background-color: #e6e6e6;
-        }
-
-        /* Button */
-        .top-bar button {
-            background-color: #9dcbe3;
-            color: #000000;
-            border: none;
-            padding: 8px 14px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .top-bar button:hover {
-            background-color: #85b8d3;
-        }
-
-        /* Title section */
-        .title-section {
-            height: calc(100vh - 50px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-    </style>
+  <!-- Local stylesheet -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header class="top-bar" role="banner">
+    <div class="site-title" aria-label="Westview Mathematica">Westview Mathematica</div>
 
-    <div class="top-bar">
-        <div class="site-title">Westview Mathematica</div>
-
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search pages...">
-            <div class="suggestions" id="suggestions"></div>
-        </div>
-
-        <a href="wolverine-math-tournament.html">
-            <button>Wolverine Math Tournament</button>
-        </a>
+    <div class="search-container" role="search">
+      <input type="search" id="searchInput" placeholder="Search pages..." aria-label="Search pages">
+      <div class="suggestions" id="suggestions" role="listbox" aria-hidden="true"></div>
     </div>
 
-    <div class="title-section">
-        <div>
-            <h1>Westview Mathematica</h1>
-            <p>Official Website of the Westview Math Club</p>
-        </div>
+    <nav>
+      <a class="cta" href="wolverine-math-tournament.html">Wolverine Math Tournament</a>
+    </nav>
+  </header>
+
+  <main class="title-section fade-in" role="main">
+    <div class="hero">
+      <h1>Westview Mathematica</h1>
+      <p>Official website of the Westview Math Club — practice problems, meetings, competitions, and resources.</p>
     </div>
+  </main>
 
-    <script>
-        const pages = [
-            {
-                title: "Home",
-                url: "index.html",
-                keywords: "westview mathematica math club home"
-            },
-            {
-                title: "Wolverine Math Tournament",
-                url: "wolverine-math-tournament.html",
-                keywords: "tournament competition wolverine math contest"
-            },
-            {
-                title: "Meetings",
-                url: "meetings.html",
-                keywords: "meetings schedule weekly practice"
-            },
-            {
-                title: "Resources",
-                url: "resources.html",
-                keywords: "amc 8 amc 10 problems resources practice"
-            }
-        ];
+  <script>
+    // ---- simple search/autocomplete (same logic as before) ----
+    const pages = [
+      { title: "Home", url: "index.html", keywords: "westview mathematica math club home" },
+      { title: "Wolverine Math Tournament", url: "wolverine-math-tournament.html", keywords: "tournament competition wolverine math contest" },
+      { title: "Meetings", url: "meetings.html", keywords: "meetings schedule weekly practice" },
+      { title: "Resources", url: "resources.html", keywords: "amc 8 amc 10 problems resources practice" }
+    ];
 
-        const searchInput = document.getElementById("searchInput");
-        const suggestions = document.getElementById("suggestions");
+    const searchInput = document.getElementById("searchInput");
+    const suggestions = document.getElementById("suggestions");
 
-        searchInput.addEventListener("input", () => {
-            const query = searchInput.value.toLowerCase();
-            suggestions.innerHTML = "";
+    function showSuggestions(matches) {
+      suggestions.innerHTML = "";
+      matches.forEach((page, i) => {
+        const div = document.createElement("div");
+        div.className = "suggestion-item";
+        div.textContent = page.title;
+        div.setAttribute("role", "option");
+        div.onclick = () => window.location.href = page.url;
+        suggestions.appendChild(div);
+      });
+      suggestions.style.display = matches.length ? "block" : "none";
+      suggestions.setAttribute("aria-hidden", matches.length ? "false" : "true");
+    }
 
-            if (query === "") {
-                suggestions.style.display = "none";
-                return;
-            }
+    searchInput.addEventListener("input", () => {
+      const q = searchInput.value.trim().toLowerCase();
+      if (!q) {
+        suggestions.style.display = "none";
+        suggestions.setAttribute("aria-hidden", "true");
+        return;
+      }
 
-            const matches = pages.filter(page =>
-                page.title.toLowerCase().includes(query) ||
-                page.keywords.includes(query)
-            );
+      const matches = pages.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.keywords.toLowerCase().includes(q)
+      );
 
-            if (matches.length === 0) {
-                suggestions.style.display = "none";
-                return;
-            }
+      if (matches.length) showSuggestions(matches);
+      else {
+        suggestions.style.display = "none";
+        suggestions.setAttribute("aria-hidden", "true");
+      }
+    });
 
-            matches.forEach(page => {
-                const div = document.createElement("div");
-                div.textContent = page.title;
-                div.onclick = () => {
-                    window.location.href = page.url;
-                };
-                suggestions.appendChild(div);
-            });
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".search-container")) {
+        suggestions.style.display = "none";
+        suggestions.setAttribute("aria-hidden", "true");
+      }
+    });
 
-            suggestions.style.display = "block";
-        });
+    // optional: keyboard navigation for suggestions
+    let idx = -1;
+    searchInput.addEventListener("keydown", (e) => {
+      const items = [...document.querySelectorAll(".suggestion-item")];
+      if (!items.length) return;
 
-        document.addEventListener("click", (e) => {
-            if (!e.target.closest(".search-container")) {
-                suggestions.style.display = "none";
-            }
-        });
-    </script>
-
+      if (e.key === "ArrowDown") {
+        idx = Math.min(idx + 1, items.length - 1);
+        items.forEach((it, i) => it.classList.toggle("focused", i === idx));
+        items[idx].scrollIntoView({ block: "nearest" });
+        e.preventDefault();
+      } else if (e.key === "ArrowUp") {
+        idx = Math.max(idx - 1, 0);
+        items.forEach((it, i) => it.classList.toggle("focused", i === idx));
+        items[idx].scrollIntoView({ block: "nearest" });
+        e.preventDefault();
+      } else if (e.key === "Enter" && idx >= 0) {
+        items[idx].click();
+      } else if (e.key === "Escape") {
+        suggestions.style.display = "none";
+        suggestions.setAttribute("aria-hidden", "true");
+      }
+    });
+  </script>
 </body>
 </html>
